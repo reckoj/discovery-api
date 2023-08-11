@@ -4,12 +4,14 @@ const UserValidator = Joi.object({
   fullname: Joi.string().required(),
   email: Joi.string().required(),
   password: Joi.string().required(),
-  phone: Joi.number(),
+  phone: Joi.string(),
   address: Joi.string().required(),
+  state: Joi.string(),
   description: Joi.string(),
   organization: Joi.string(),
   age: Joi.string().required(),
   island: Joi.string().required(),
+
   user_type: Joi.string().required(),
   notes: Joi.array(),
   attachments: Joi.array(),
@@ -18,10 +20,12 @@ const UserValidator = Joi.object({
 const CustomerValidator = Joi.object({
   fullname: Joi.string().required(),
   email: Joi.string().required(),
-  phone: Joi.number(),
+  phone: Joi.string(),
   address: Joi.string().required(),
+  state: Joi.string(),
   description: Joi.string(),
-  island: Joi.string().required(),
+  island: Joi.string(),
+
   customer_id: Joi.string().required(),
   organization: Joi.string().required(),
   added_by: Joi.string(),
@@ -32,10 +36,12 @@ const CustomerValidator = Joi.object({
 const ContactValidator = Joi.object({
   fullname: Joi.string().required(),
   email: Joi.string().required(),
-  phone: Joi.number(),
+  phone: Joi.string(),
   address: Joi.string().required(),
+  state: Joi.string(),
   description: Joi.string(),
-  island: Joi.string().required(),
+  // island: Joi.string(),
+  country: Joi.string(),
   contact_id: Joi.string().required(),
   organization: Joi.string().required(),
   added_by: Joi.string(),
@@ -48,6 +54,7 @@ const OrganizationValidator = Joi.object({
   owner: Joi.string().required(),
   email: Joi.string().required(),
   island: Joi.string().required(),
+
   password: Joi.string().required(),
   description: Joi.string().required(),
   user_type: Joi.string().required(),
@@ -75,7 +82,7 @@ const TicketsValidator = Joi.object({
 const NotesValidator = Joi.object({
   title: Joi.string().required(),
   content: Joi.string().required(),
-  user: Joi.string().required(),
+  user: Joi.string(),
   added_by: Joi.string(),
   is_deleted: Joi.boolean().required(),
 });

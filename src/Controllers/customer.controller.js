@@ -73,21 +73,49 @@ exports.getOne = async (req, res, next) => {
 
 exports.getAll = async (req, res, next) => {
   try {
-    const { page = 1, limit = 10, organization = '', island = '' } = req.query;
+    const { page = 1, limit = 10, organization = '', search = '' } = req.query;
     const offset = (page - 1) * limit;
     const totalItems = await Customer.countDocuments({
-      organization,
-      island: { $regex: island, $options: 'i' },
+      $or: [
+        { fullname: { $regex: search, $options: 'i' } },
+        { email: { $regex: search, $options: 'i' } },
+        { phone: { $regex: search, $options: 'i' } },
+        { address: { $regex: search, $options: 'i' } },
+        { state: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } },
+        { island: { $regex: search, $options: 'i' } },
+
+        { organization: { $regex: search | organization, $options: 'i' } },
+      ],
     });
     const u_query = organization
       ? Customer.find({
-          organization,
-          island: { $regex: island, $options: 'i' },
-        })
-      : Customer.find({ island: { $regex: island, $options: 'i' } });
-    let results = await u_query.skip(offset).limit(limit);
+          $or: [
+            { fullname: { $regex: search, $options: 'i' } },
+            { email: { $regex: search, $options: 'i' } },
+            { phone: { $regex: search, $options: 'i' } },
+            { address: { $regex: search, $options: 'i' } },
+            { state: { $regex: search, $options: 'i' } },
+            { description: { $regex: search, $options: 'i' } },
+            { island: { $regex: search, $options: 'i' } },
 
-    console.log("results: ", organization);
+            { organization: { $regex: search | organization, $options: 'i' } },
+          ],
+        })
+      : Customer.find({
+          $or: [
+            { fullname: { $regex: search, $options: 'i' } },
+            { email: { $regex: search, $options: 'i' } },
+            { phone: { $regex: search, $options: 'i' } },
+            { address: { $regex: search, $options: 'i' } },
+            { state: { $regex: search, $options: 'i' } },
+            { description: { $regex: search, $options: 'i' } },
+            { island: { $regex: search, $options: 'i' } },
+
+            { organization: { $regex: search | organization, $options: 'i' } },
+          ],
+        });
+    let results = await u_query.skip(offset).limit(limit);
 
     const totalPages = Math.ceil(totalItems / limit) || 1;
     return res.status(HTTP_STATUS_CODE.OK).json({
